@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 // Get all books from PostgreSQL
 app.get("/users", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT * FROM public.users");
 
     res.status(200).json(result.rows);
   } catch (error) {
