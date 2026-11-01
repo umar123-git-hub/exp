@@ -17,7 +17,7 @@ app.get("/check-config", (req, res) => {
     port: process.env.PORT,
   });
 });
-// Get all books from PostgreSQL
+// Get all users
 app.get("/users", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM users");
@@ -32,6 +32,26 @@ app.get("/users", async (req, res) => {
     });
   }
 });
+// Get all users
+
+// Get all tasks
+app.get("/tasks", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM tasks ORDER BY "createdAt" DESC`,
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("GET TASKS ERROR:", error);
+
+    res.status(500).json({
+      message: "Failed to fetch tasks",
+      error: error.message,
+    });
+  }
+});
+// Get all tasks
 
 app.listen(process.env.PORT || 3000, "0.0.0.0", () => {
   console.log("Express server running");
