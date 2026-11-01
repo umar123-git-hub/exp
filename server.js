@@ -10,11 +10,18 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Express server is running successfully!");
 });
-// GET all users
-app.get("/users", (req, res) => {
-  res.json({ message: "Users endpoint working!" });
+// Get all books from PostgreSQL
+app.get("/users", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM books");
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3000, "0.0.0.0", () => {
   console.log("Express server running");
 });
