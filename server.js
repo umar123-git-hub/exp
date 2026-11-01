@@ -11,16 +11,8 @@ app.get("/", (req, res) => {
   res.send("Express server is running successfully!");
 });
 // GET all users
-app.get("/users", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "SELECT * FROM users ORDER BY created_at DESC",
-    );
-
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+app.get("/users", (req, res) => {
+  res.json({ message: "Users endpoint working!" });
 });
 
 app.listen(process.env.PORT || 3000, () => {
