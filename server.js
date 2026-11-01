@@ -11,6 +11,23 @@ app.get("/", (req, res) => {
   res.send("Express server is running successfully!");
 });
 // Get all books from PostgreSQL
+app.get("/test-db", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+
+    res.json({
+      connected: true,
+      databaseTime: result.rows[0],
+    });
+  } catch (error) {
+    console.error("DB CONNECTION ERROR:", error.message);
+
+    res.status(500).json({
+      connected: false,
+      error: error.message,
+    });
+  }
+});
 app.get("/users", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM public.users");
