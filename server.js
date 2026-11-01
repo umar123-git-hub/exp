@@ -10,27 +10,17 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Express server is running successfully!");
 });
-// Get all books from PostgreSQL
-app.get("/test-db", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-
-    res.json({
-      connected: true,
-      databaseTime: result.rows[0],
-    });
-  } catch (error) {
-    console.error("DB CONNECTION ERROR:", error.message);
-
-    res.status(500).json({
-      connected: false,
-      error: error.message,
-    });
-  }
+app.get("/check-config", (req, res) => {
+  res.json({
+    databaseUrlExists: !!process.env.DATABASE_URL,
+    databaseUrlLength: process.env.DATABASE_URL?.length || 0,
+    port: process.env.PORT,
+  });
 });
+// Get all books from PostgreSQL
 app.get("/users", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM public.users");
+    const result = await pool.query("SELECT * FROM users");
 
     res.status(200).json(result.rows);
   } catch (error) {
