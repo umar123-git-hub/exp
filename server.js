@@ -103,7 +103,7 @@ app.post("/tasks", async (req, res) => {
         description,
         createdBy,
         priority,
-        assignees,
+        JSON.stringify(assignees),
         moduleName,
         tags,
         estimatedTime,
