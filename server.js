@@ -54,6 +54,7 @@ app.get("/tasks", async (req, res) => {
 // Get all tasks
 
 // create task
+// create task
 app.post("/tasks", async (req, res) => {
   const {
     title,
@@ -105,15 +106,15 @@ app.post("/tasks", async (req, res) => {
         priority,
         JSON.stringify(assignees),
         moduleName,
-        tags,
-        estimatedTime,
-        loggedTime,
-        attachments,
+        JSON.stringify(tags),
+        JSON.stringify(estimatedTime),
+        JSON.stringify(loggedTime),
+        JSON.stringify(attachments),
         startDate,
         endDate,
         stage,
-        comments,
-        history,
+        JSON.stringify(comments),
+        JSON.stringify(history),
       ],
     );
 
