@@ -134,6 +134,7 @@ app.post("/tasks", async (req, res) => {
 // create task
 
 // update task with id
+// edit task
 app.put("/tasks/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -179,23 +180,25 @@ app.put("/tasks/:id", async (req, res) => {
         title,
         description,
         priority,
-        assignees,
+        JSON.stringify(assignees),
         moduleName,
-        tags,
-        estimatedTime,
-        loggedTime,
-        attachments,
+        JSON.stringify(tags),
+        JSON.stringify(estimatedTime),
+        JSON.stringify(loggedTime),
+        JSON.stringify(attachments),
         startDate,
         endDate,
         stage,
-        comments,
-        history,
+        JSON.stringify(comments),
+        JSON.stringify(history),
         id,
       ],
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({
+        message: "Task not found",
+      });
     }
 
     res.status(200).json({
