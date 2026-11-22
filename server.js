@@ -206,20 +206,24 @@ app.get("/tasks", async (req, res) => {
     // DATE FILTERS
     // =========================
 
-    if (startDate) {
+    if (startDate === "null") {
+      conditions.push(`"startDate" IS NULL`);
+    } else if (startDate) {
       values.push(startDate);
 
       conditions.push(`
-        "startDate" >= $${values.length}
-      `);
+    "startDate" >= $${values.length}
+  `);
     }
 
-    if (endDate) {
+    if (endDate === "null") {
+      conditions.push(`"endDate" IS NULL`);
+    } else if (endDate) {
       values.push(endDate);
 
       conditions.push(`
-        "endDate" <= $${values.length}
-      `);
+    "endDate" >= $${values.length}
+  `);
     }
 
     // =========================
