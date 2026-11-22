@@ -35,22 +35,6 @@ app.get("/users", async (req, res) => {
 // Get all users
 
 // Get all tasks
-// app.get("/tasks", async (req, res) => {
-//   try {
-//     const result = await pool.query(
-//       `SELECT * FROM tasks ORDER BY "createdAt" DESC`,
-//     );
-
-//     res.status(200).json(result.rows);
-//   } catch (error) {
-//     console.error("GET TASKS ERROR:", error);
-
-//     res.status(500).json({
-//       message: "Failed to fetch tasks",
-//       error: error.message,
-//     });
-//   }
-// });
 app.get("/tasks", async (req, res) => {
   const {
     title,
@@ -250,7 +234,52 @@ app.get("/tasks", async (req, res) => {
 });
 // Get all tasks
 
-// create task
+// global search
+app.get("/tasks/search", async (req, res) => {
+  const { search } = req.query;
+
+  if (!search || !search.trim()) {
+    return res.status(400).json({
+      message: "Search query is required",
+    });
+  }
+
+  try {
+    const searchValue = `%${search.trim()}%`;
+
+    const result = await pool.query(
+      `
+      SELECT *
+      FROM tasks
+      WHERE
+        title ILIKE $1
+        OR description ILIKE $1
+        OR priority ILIKE $1
+        OR "moduleName" ILIKE $1
+        OR stage ILIKE $1
+        OR tags::text ILIKE $1
+        OR assignees::text ILIKE $1
+        OR "loggedTime"::text ILIKE $1
+        OR attachments::text ILIKE $1
+        OR comments::text ILIKE $1
+        OR history::text ILIKE $1
+      ORDER BY "createdAt" DESC
+      `,
+      [searchValue],
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("GLOBAL SEARCH ERROR:", error);
+
+    res.status(500).json({
+      message: "Failed to search tasks",
+      error: error.message,
+    });
+  }
+});
+// global search
+
 // create task
 app.post("/tasks", async (req, res) => {
   const {
